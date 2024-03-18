@@ -1,0 +1,31 @@
+.shake-animation {
+  animation: shake 1s ease-in-out;
+  box-shadow: 1.5px 1.5px 8px rgb(255, 0, 0);
+}
+
+/* .shake-animation::placeholder {
+  color: red;
+} */
+
+@keyframes shake {
+  10%,
+  90% {
+    transform: translateX(-2px);
+  }
+
+  20%,
+  80% {
+    transform: translateX(2px);
+  }
+
+  30%,
+  50%,
+  70% {
+    transform: translateX(-2px);
+  }
+
+  40%,
+  60% {
+    transform: translateX(2px);
+  }
+}
