@@ -12,8 +12,9 @@ function InputForm({ inputValue, inputType, handleChange, isEmpty }) {
           : "bg-white text-center text-black w-4/5 mx-auto rounded-xl p-3 border-2 text-lg mb-3 border-purple-900"
       }
       type={defaultType}
-      placeholder={inputValue}
+      placeholder={"Type new task"}
       onChange={handleChange}
+      defaultValue={inputValue}
     />
   );
 }

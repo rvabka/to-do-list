@@ -5,7 +5,7 @@ function Button({ clickHandler }) {
   return (
     <button
       onClick={clickHandler}
-      className="flex items-center justify-center size-12 mt-1 border-2 rounded-full transition-colors duration-300 hover:bg-purple-900"
+      className="flex items-center justify-center size-12 mt-1 border-2 bg-buttonBg border-white rounded-full text-white transition-colors duration-300"
     >
       <FaPlus />
     </button>

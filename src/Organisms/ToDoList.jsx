@@ -4,9 +4,15 @@ import ToDoForm from "./ToDoForm";
 import { v4 as uuidv4 } from "uuid";
 import ToDoItem from "../Moleclues/ToDoItem";
 import { AnimatePresence } from "framer-motion";
+import ToDoEdit from "./ToDoEdit";
 
 function ToDoList({ task, setTask, isOpen, isOpenHandler }) {
-  const [input, setInput] = useState({
+  const [switchEditModal, setSwitchEditModal] = useState(false);
+  const [mainInputs, setMainInputs] = useState({
+    value: "",
+    date: "",
+  });
+  const [editingTask, setEditingTask] = useState({
     value: "",
     date: "",
   });
@@ -17,26 +23,55 @@ function ToDoList({ task, setTask, isOpen, isOpenHandler }) {
 
   function checkInputs() {
     const updatedIsEmptyInput = {
-      emptyValue: input.value === "",
-      emptyDate: input.date === "",
+      emptyValue: mainInputs.value === "",
+      emptyDate: mainInputs.date === "",
     };
     setEmptyInput(updatedIsEmptyInput);
   }
 
   function addTask() {
     checkInputs();
-    if (input.value && input.date != "") {
-      const newItem = { id: uuidv4(), text: input.value, date: input.date };
+    if (mainInputs.value && mainInputs.date != "") {
+      const newItem = {
+        id: uuidv4(),
+        text: mainInputs.value,
+        date: mainInputs.date,
+      };
       setTask((prevTasks) => [...prevTasks, newItem]);
       isOpenHandler();
-      setInput({ value: "", date: "" });
+      setMainInputs({ value: "", date: "" });
     }
+  }
+
+  function isEditHandler(task) {
+    setSwitchEditModal((prev) => !prev);
+    isOpen ? setSwitchEditModal(false) : null;
+    setEditingTask(task);
   }
 
   function deleteTask(clickedTask) {
     setTask(task.filter((el) => el.id !== clickedTask));
+    setSwitchEditModal(false);
   }
-  console.log(task);
+
+  function handleUpdateTask(updateTask) {
+    setTask((prevTask) =>
+      prevTask.map((task) => {
+        if (task.id === updateTask.id) {
+          return {
+            ...task,
+            text: updateTask.value,
+            date: updateTask.date,
+          };
+        }
+        return task;
+      })
+    );
+    setSwitchEditModal(false);
+  }
+  console.log(task)
+
+
 
   return (
     <div className="relative w-full h-[650px] flex justify-center flex-column p-5">
@@ -50,17 +85,23 @@ function ToDoList({ task, setTask, isOpen, isOpenHandler }) {
                 text={text}
                 date={date}
                 deleteTask={deleteTask}
+                onEdit={isEditHandler}
               />
             );
           })}
         </AnimatePresence>
       </ul>
+      <ToDoEdit
+        values={editingTask}
+        switchEditModal={switchEditModal}
+        handleUpdateTask={handleUpdateTask}
+      />
       <ToDoForm
-        setInput={setInput}
-        input={input}
         addTask={addTask}
         isOpen={isOpen}
         emptyInput={emptyInput}
+        setMainInputs={setMainInputs}
+        mainInputs={mainInputs}
       />
     </div>
   );

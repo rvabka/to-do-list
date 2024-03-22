@@ -3,7 +3,6 @@ import Header from "./Organisms/Header";
 import ToDoList from "./Organisms/ToDoList";
 
 function App() {
-  // eslint-disable-next-line no-unused-vars
   const [isOpen, setIsOpen] = useState(false);
   const [task, setTask] = useState([]);
   const userName = "John";
