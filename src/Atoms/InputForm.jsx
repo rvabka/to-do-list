@@ -8,11 +8,11 @@ function InputForm({ inputValue, inputType, handleChange, isEmpty }) {
     <input
       className={
         isEmpty
-          ? "shake-animation bg-white text-center text-black w-4/5 mx-auto rounded-xl p-3 border-2 text-lg mb-3 border-purple-900"
-          : "bg-white text-center text-black w-4/5 mx-auto rounded-xl p-3 border-2 text-lg mb-3 border-purple-900"
+          ? "shake-animation text-gray-600 w-full mx-auto rounded-xl p-3 border-2 text-lg mb-3 border-gray-300"
+          : "w-full text-gray-600 mx-auto rounded-xl p-3 border-2 text-lg mb-3 border-gray-300"
       }
       type={defaultType}
-      placeholder={"Type new task"}
+      placeholder={"Task name..."}
       onChange={handleChange}
       defaultValue={inputValue}
     />

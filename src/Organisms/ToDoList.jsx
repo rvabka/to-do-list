@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from "uuid";
 import ToDoItem from "../Moleclues/ToDoItem";
 import { AnimatePresence } from "framer-motion";
 import ToDoEdit from "./ToDoEdit";
+import EmptyTask from "../Moleclues/EmptyTask"
 
 function ToDoList({ task, setTask, isOpen, isOpenHandler }) {
   const [switchEditModal, setSwitchEditModal] = useState(false);
@@ -69,27 +70,36 @@ function ToDoList({ task, setTask, isOpen, isOpenHandler }) {
     );
     setSwitchEditModal(false);
   }
+
   console.log(task)
 
-
-
   return (
-    <div className="relative w-full h-[650px] flex justify-center flex-column p-5">
-      <ul className="w-svw list-none h-[400px] overflow-y-auto">
-        <AnimatePresence mode="sync">
-          {task.map(({ id, text, date }) => {
-            return (
-              <ToDoItem
-                key={id}
-                id={id}
-                text={text}
-                date={date}
-                deleteTask={deleteTask}
-                onEdit={isEditHandler}
-              />
-            );
-          })}
-        </AnimatePresence>
+    <div className="relative w-full h-full flex justify-center flex-column p-5">
+      <ul
+        className={
+          isOpen || switchEditModal
+            ? "w-svw list-none h-[400px] overflow-y-auto blur-[2px] transition-all"
+            : "w-svw list-none h-[400px] overflow-y-auto"
+        }
+      >
+        {task.length <= 0 ? (
+          <EmptyTask />
+        ) : (
+          <AnimatePresence mode="sync">
+            {task.map(({ id, text, date }) => {
+              return (
+                <ToDoItem
+                  key={id}
+                  id={id}
+                  text={text}
+                  date={date}
+                  deleteTask={deleteTask}
+                  onEdit={isEditHandler}
+                />
+              );
+            })}
+          </AnimatePresence>
+        )}
       </ul>
       <ToDoEdit
         values={editingTask}

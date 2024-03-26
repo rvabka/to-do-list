@@ -9,10 +9,10 @@ function App() {
 
   function isOpenHandler() {
     setIsOpen((prev) => !prev);
-  }
+  } // włączanie Form z dodawanie taska
 
   return (
-    <div className="h-svh w-svw bg-white text-gray-800">
+    <div className="h-svh w-svw bg-custom-bg text-custom-text">
       <Header isOpenHandler={isOpenHandler} userName={userName} />
       <ToDoList
         task={task}

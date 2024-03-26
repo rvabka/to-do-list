@@ -23,12 +23,13 @@ function ToDoEdit({ values, switchEditModal, handleUpdateTask }) {
     <>
       {switchEditModal && (
         <motion.div
-          className="absolute w-svw h-[150px] gradient p-4 bottom-14"
+          className="absolute w-screen h-[150px] p-4 bottom-14"
           initial={{ y: "100%" }}
-          animate={{ y: switchEditModal ? 0 : "100%" }}
+          animate={{ y: switchEditModal ? "-250px": "100%" }}
           transition={{ duration: 0.3 }}
         >
           <div className="flex items-center justify-center flex-col p-5 bg-gradientBg text-white rounded-xl">
+          <h1 className="text-black text-xl font-bold py-3 -mt-3 mb-3">Edit Task</h1>
             <InputForm
               // isEmpty={emptyInput.emptyValue}
               handleChange={handleChangeValue}
@@ -43,7 +44,7 @@ function ToDoEdit({ values, switchEditModal, handleUpdateTask }) {
               isEmpty={false}
             />
             <button
-              className="bg-white text-lg text-black w-3/5 up mx-auto rounded-xl p-3 border-2 border-purple-900"
+              className="bg-buttonBg text-lg text-white w-full up mx-auto rounded-xl p-3 border-2 border-none"
               onClick={onUpdateTask}
             >
               Edit task

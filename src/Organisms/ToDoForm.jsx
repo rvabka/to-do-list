@@ -2,14 +2,7 @@ import PropTypes from "prop-types";
 import { motion } from "framer-motion";
 import InputForm from "../Atoms/InputForm";
 
-function ToDoForm({
-  addTask,
-  isOpen,
-  emptyInput,
-  setMainInputs,
-  mainInputs,
-}) {
-
+function ToDoForm({ addTask, isOpen, emptyInput, setMainInputs, mainInputs }) {
   function handleChangeValue(event) {
     setMainInputs({ ...mainInputs, value: event.target.value });
   }
@@ -22,12 +15,13 @@ function ToDoForm({
     <>
       {isOpen && (
         <motion.div
-          className="absolute w-svw h-[150px] gradient p-4 bottom-14"
+          className="absolute w-screen h-[150px] p-4 bottom-14"
           initial={{ y: "100%" }}
-          animate={{ y: isOpen ? 0 : "100%" }}
+          animate={{ y: isOpen ? "-250px" : "100%" }}
           transition={{ duration: 0.3 }}
         >
-          <div className="flex items-center justify-center flex-col p-5 bg-gradientBg text-white rounded-xl">
+          <div className="flex items-center bg-custom-2bg justify-center flex-col p-5 bg-gradientBg shadow-inner rounded-xl">
+            <h1 className="text-xl font-bold py-3 -mt-3 mb-3">New Task</h1>
             <InputForm
               isEmpty={emptyInput.emptyValue}
               handleChange={handleChangeValue}
@@ -40,10 +34,10 @@ function ToDoForm({
               inputValue={mainInputs.date}
             />
             <button
-              className="bg-white text-lg text-black w-3/5 up mx-auto rounded-xl p-3 border-2 border-purple-900"
+              className="bg-custom-purple text-lg text-white w-full up mx-auto rounded-xl p-3 border-2 border-none"
               onClick={addTask}
             >
-              Add new task
+              + Add new task
             </button>
           </div>
         </motion.div>
