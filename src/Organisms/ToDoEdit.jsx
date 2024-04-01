@@ -6,8 +6,8 @@ import { useEffect, useState } from "react";
 function ToDoEdit({ values, switchEditModal, handleUpdateTask }) {
   const [editededTask, setEditedTask] = useState(values);
   useEffect(() => {
-    setEditedTask(values)
-  }, [values])
+    setEditedTask(values);
+  }, [values]);
 
   function onUpdateTask() {
     handleUpdateTask(editededTask);
@@ -25,11 +25,11 @@ function ToDoEdit({ values, switchEditModal, handleUpdateTask }) {
         <motion.div
           className="absolute w-screen h-[150px] p-4 bottom-14"
           initial={{ y: "100%" }}
-          animate={{ y: switchEditModal ? "-250px": "100%" }}
+          animate={{ y: switchEditModal ? "-250px" : "100%" }}
           transition={{ duration: 0.3 }}
         >
-          <div className="flex items-center justify-center flex-col p-5 bg-gradientBg text-white rounded-xl">
-          <h1 className="text-black text-xl font-bold py-3 -mt-3 mb-3">Edit Task</h1>
+          <div className="flex items-center bg-custom-2bg justify-center flex-col p-5 bg-gradientBg shadow-inner rounded-xl">
+            <h1 className="text-xl font-bold py-3 -mt-3 mb-3">Edit Task</h1>
             <InputForm
               // isEmpty={emptyInput.emptyValue}
               handleChange={handleChangeValue}
@@ -44,7 +44,7 @@ function ToDoEdit({ values, switchEditModal, handleUpdateTask }) {
               isEmpty={false}
             />
             <button
-              className="bg-buttonBg text-lg text-white w-full up mx-auto rounded-xl p-3 border-2 border-none"
+              className="bg-custom-purple text-lg text-white w-full up mx-auto rounded-xl p-3 border-2 border-none"
               onClick={onUpdateTask}
             >
               Edit task

@@ -1,13 +1,21 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import ToDoForm from "./ToDoForm";
 import { v4 as uuidv4 } from "uuid";
 import ToDoItem from "../Moleclues/ToDoItem";
 import { AnimatePresence } from "framer-motion";
 import ToDoEdit from "./ToDoEdit";
-import EmptyTask from "../Moleclues/EmptyTask"
+import EmptyTask from "../Atoms/EmptyTask";
 
-function ToDoList({ task, setTask, isOpen, isOpenHandler }) {
+function ToDoList({
+  task,
+  setTask,
+  isOpen,
+  setIsOpen,
+  isOpenHandler,
+  taskDone,
+  setTaskDone,
+}) {
   const [switchEditModal, setSwitchEditModal] = useState(false);
   const [mainInputs, setMainInputs] = useState({
     value: "",
@@ -20,6 +28,22 @@ function ToDoList({ task, setTask, isOpen, isOpenHandler }) {
   const [emptyInput, setEmptyInput] = useState({
     emptyValue: false,
     emptyDate: false,
+  });
+
+  let menuRef = useRef();
+  useEffect(() => {
+    let handler = (e) => {
+      if (menuRef.current.contains(e.target)) {
+        setSwitchEditModal(false);
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handler);
+
+    return () => {
+      document.removeEventListener("mousedown", handler);
+    };
   });
 
   function checkInputs() {
@@ -53,6 +77,7 @@ function ToDoList({ task, setTask, isOpen, isOpenHandler }) {
   function deleteTask(clickedTask) {
     setTask(task.filter((el) => el.id !== clickedTask));
     setSwitchEditModal(false);
+    setTaskDone(false);
   }
 
   function handleUpdateTask(updateTask) {
@@ -71,11 +96,10 @@ function ToDoList({ task, setTask, isOpen, isOpenHandler }) {
     setSwitchEditModal(false);
   }
 
-  console.log(task)
-
   return (
-    <div className="relative w-full h-full flex justify-center flex-column p-5">
+    <div className="relative flex h-[75%] justify-center flex-column p-6">
       <ul
+        ref={menuRef}
         className={
           isOpen || switchEditModal
             ? "w-svw list-none h-[400px] overflow-y-auto blur-[2px] transition-all"
@@ -95,6 +119,8 @@ function ToDoList({ task, setTask, isOpen, isOpenHandler }) {
                   date={date}
                   deleteTask={deleteTask}
                   onEdit={isEditHandler}
+                  taskDone={taskDone}
+                  setTaskDone={setTaskDone}
                 />
               );
             })}
@@ -105,6 +131,7 @@ function ToDoList({ task, setTask, isOpen, isOpenHandler }) {
         values={editingTask}
         switchEditModal={switchEditModal}
         handleUpdateTask={handleUpdateTask}
+        // menuRef={menuRef}
       />
       <ToDoForm
         addTask={addTask}
@@ -112,6 +139,7 @@ function ToDoList({ task, setTask, isOpen, isOpenHandler }) {
         emptyInput={emptyInput}
         setMainInputs={setMainInputs}
         mainInputs={mainInputs}
+        // menuRef={menuRef}
       />
     </div>
   );
@@ -121,7 +149,10 @@ ToDoList.propTypes = {
   task: PropTypes.any,
   setTask: PropTypes.func,
   isOpen: PropTypes.bool.isRequired,
+  setIsOpen: PropTypes.func,
   isOpenHandler: PropTypes.func,
+  taskDone: PropTypes.bool,
+  setTaskDone: PropTypes.func,
 };
 
 export default ToDoList;
