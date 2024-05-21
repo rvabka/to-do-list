@@ -6,6 +6,7 @@ import ToDoItem from "../Moleclues/ToDoItem";
 import { AnimatePresence } from "framer-motion";
 import ToDoEdit from "./ToDoEdit";
 import EmptyTask from "../Atoms/EmptyTask";
+import AnimatedPage from "../Moleclues/AnimatedPage";
 
 function ToDoList({
   task,
@@ -13,7 +14,6 @@ function ToDoList({
   isOpen,
   setIsOpen,
   isOpenHandler,
-  taskDone,
   setTaskDone,
 }) {
   const [switchEditModal, setSwitchEditModal] = useState(false);
@@ -36,6 +36,7 @@ function ToDoList({
       if (menuRef.current.contains(e.target)) {
         setSwitchEditModal(false);
         setIsOpen(false);
+        setEmptyInput({ emptyValue: false, emptyDate: false });
       }
     };
 
@@ -61,6 +62,7 @@ function ToDoList({
         id: uuidv4(),
         text: mainInputs.value,
         date: mainInputs.date,
+        finished: false,
       };
       setTask((prevTasks) => [...prevTasks, newItem]);
       isOpenHandler();
@@ -74,10 +76,20 @@ function ToDoList({
     setEditingTask(task);
   }
 
-  function deleteTask(clickedTask) {
-    setTask(task.filter((el) => el.id !== clickedTask));
-    setSwitchEditModal(false);
-    setTaskDone(false);
+  function handleFinishedTask(finishedTask) {
+    setTask((prevTask) =>
+      prevTask.map((task) => {
+        if (task.id === finishedTask.id) {
+          return {
+            ...task,
+            finished: finishedTask.finished,
+            text: finishedTask.value,
+            date: finishedTask.date,
+          };
+        }
+        return task;
+      })
+    );
   }
 
   function handleUpdateTask(updateTask) {
@@ -86,6 +98,7 @@ function ToDoList({
         if (task.id === updateTask.id) {
           return {
             ...task,
+            finished: updateTask.finished,
             text: updateTask.value,
             date: updateTask.date,
           };
@@ -96,8 +109,15 @@ function ToDoList({
     setSwitchEditModal(false);
   }
 
+  function deleteTask(clickedTask) {
+    setTask(task.filter((el) => el.id !== clickedTask));
+    setSwitchEditModal(false);
+    setTaskDone(false);
+  }
+
+
   return (
-    <div className="relative flex h-[75%] justify-center flex-column p-6">
+    <AnimatedPage>
       <ul
         ref={menuRef}
         className={
@@ -110,16 +130,17 @@ function ToDoList({
           <EmptyTask />
         ) : (
           <AnimatePresence mode="sync">
-            {task.map(({ id, text, date }) => {
+            {task.map(({ id, text, date, finished }) => {
               return (
                 <ToDoItem
                   key={id}
                   id={id}
                   text={text}
                   date={date}
+                  finished={finished}
                   deleteTask={deleteTask}
                   onEdit={isEditHandler}
-                  taskDone={taskDone}
+                  handleFinishedTask={handleFinishedTask}
                   setTaskDone={setTaskDone}
                 />
               );
@@ -131,7 +152,6 @@ function ToDoList({
         values={editingTask}
         switchEditModal={switchEditModal}
         handleUpdateTask={handleUpdateTask}
-        // menuRef={menuRef}
       />
       <ToDoForm
         addTask={addTask}
@@ -139,9 +159,8 @@ function ToDoList({
         emptyInput={emptyInput}
         setMainInputs={setMainInputs}
         mainInputs={mainInputs}
-        // menuRef={menuRef}
       />
-    </div>
+    </AnimatedPage>
   );
 }
 
@@ -151,7 +170,6 @@ ToDoList.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   setIsOpen: PropTypes.func,
   isOpenHandler: PropTypes.func,
-  taskDone: PropTypes.bool,
   setTaskDone: PropTypes.func,
 };
 

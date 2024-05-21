@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { validityTime } from "../Helpers/helpers";
 import PropTypes from "prop-types";
 import { GoTrash } from "react-icons/go";
@@ -13,9 +13,10 @@ function ToDoItem({
   id,
   text,
   date,
+  finished,
   deleteTask,
   onEdit,
-  taskDone,
+  handleFinishedTask,
   setTaskDone,
 }) {
   const [dropdown, setDropdown] = useState(false);
@@ -28,10 +29,14 @@ function ToDoItem({
     setDropdown((prev) => !prev);
   }
 
-  function toggleTaskDone() {
-    setTaskDone((prev) => !prev);
-  }
-
+  const handleTaskDone = useCallback(() => {
+    setTaskDone(prevTaskDone => {
+      const newTaskDone = !prevTaskDone;
+      handleFinishedTask({ id: id, finished: newTaskDone, value: text, date: date });
+      return newTaskDone;
+    });
+  }, [setTaskDone, handleFinishedTask, id, text, date]);
+  
   return (
     <>
       <motion.li
@@ -42,7 +47,7 @@ function ToDoItem({
         <div className="TEXT w-1/2">
           <p
             className={
-              !taskDone
+              !finished
                 ? "text-xl font-bold transition-all duration-400"
                 : "text-xl font-thin line-through italic text-gray-500 transition-all duration-400"
             }
@@ -50,7 +55,7 @@ function ToDoItem({
             {text}
           </p>
           <p className="text-base font-normal text-purple-700 mt-1 transition-all duration-400">
-            {!taskDone ? validityTime(date) : "Task done"}
+            {!finished ? validityTime(date) : "Task done"}
           </p>
         </div>
         <motion.button
@@ -76,9 +81,9 @@ function ToDoItem({
         >
           <button
             className="DONE p-3 border-2 rounded-full transition-colors hover:bg-green-500"
-            onClick={toggleTaskDone}
+            onClick={handleTaskDone}
           >
-            {taskDone ? (
+            {finished ? (
               <MdDoneAll className="size-7" />
             ) : (
               <MdDone className="size-7" />
@@ -106,8 +111,10 @@ ToDoItem.propTypes = {
   id: PropTypes.string,
   text: PropTypes.string,
   date: PropTypes.string,
+  finished: PropTypes.bool,
   deleteTask: PropTypes.func,
   onEdit: PropTypes.func,
+  handleFinishedTask: PropTypes.func,
   taskDone: PropTypes.bool,
   setTaskDone: PropTypes.func,
 };

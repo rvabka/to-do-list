@@ -25,7 +25,7 @@ function ToDoEdit({ values, switchEditModal, handleUpdateTask }) {
         <motion.div
           className="absolute w-screen h-[150px] p-4 bottom-14"
           initial={{ y: "100%" }}
-          animate={{ y: switchEditModal ? "-250px" : "100%" }}
+          animate={{ y: switchEditModal ? "-100px" : "100%" }}
           transition={{ duration: 0.3 }}
         >
           <div className="flex items-center bg-custom-2bg justify-center flex-col p-5 bg-gradientBg shadow-inner rounded-xl">
